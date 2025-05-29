@@ -219,18 +219,23 @@ body {
 .time-slot.english {
   border-left-color: #ff69b4;
 }
+
 .time-slot.maths {
   border-left-color: #32cd32;
 }
+
 .time-slot.physics {
   border-left-color: #ff4500;
 }
+
 .time-slot.botany {
   border-left-color: #4169e1;
 }
+
 .time-slot.tamil {
   border-left-color: #ff69b4;
 }
+
 .time-slot.chemistry {
   border-left-color: #ffd700;
 }
@@ -672,12 +677,6 @@ body {
   color: white;
 }
 
-.classes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
 .class-card {
   background: white;
   border-radius: 12px;
@@ -1038,7 +1037,7 @@ body {
 /* Class Cards */
 .classes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
   gap: 1.5rem;
 }
 

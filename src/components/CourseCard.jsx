@@ -42,7 +42,7 @@ const CourseCard = ({ course, user }) => {
         <div className="course-content text-black">
           <h3 className="course-name">{course.courseName}</h3>
           {course.instructors && (
-            <p className="course-teacher">Instructor : {course.instructors}</p>
+            <p className="course-teacher">Instructor : {course.instructors.join(", ")}</p>
           )}
           {course.NoOfStudents && (
             <p className="no-of-students">

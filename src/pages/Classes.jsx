@@ -16,8 +16,10 @@ const Classes = () => {
   const [classes, setClasses] = useState([]);
 
   // Calculate tab counts
-  const liveCount = classes.filter((c) => c.active).length;
-  const scheduledCount = classes.filter((c) => !c.active).length;
+  const liveCount = classes.filter((c) => c.status == "LIVE").length;
+  const scheduledCount = classes.filter((c) => c.status == "INACTIVE").length;
+  const completedCount = classes.filter((c) => c.status == "COMPLETED").length;
+
   const totalCount = classes.length;
 
   useEffect(() => {
@@ -69,14 +71,14 @@ const Classes = () => {
         <div className="class-header">
           <div className="class-icon" style={{ backgroundColor: "#9370DB" }}>
             <span className="material-icons" style={{ color: "white" }}>
-              {classItem.active ? "video_call" : "class"}
+              {classItem.status == "LIVE" ? "video_call" : "class"}
             </span>
           </div>
           <div className="class-status">
             <span
-              className={`status-badge ${classItem.active ? "active" : "inactive"}`}
+              className={`status-badge ${classItem.status == "LIVE" ? "active" : "inactive"}`}
             >
-              {classItem.active ? "Active" : "Inactive"}
+              {classItem.status == "LIVE" ? "Live" : classItem.status == "INACTIVE" ? "Scheduled" : "Completed"}
             </span>
           </div>
         </div>
@@ -108,7 +110,7 @@ const Classes = () => {
             </div>
           </div>
           <div className="class-actions">
-            {classItem.active &&
+            {classItem.status == "LIVE" &&
               (user.role === "TEACHER" ? (
                 <button
                   onClick={() => handleClassBtn(classItem.id)}
@@ -126,7 +128,7 @@ const Classes = () => {
                   <span className="material-icons">video_call</span>
                 </button>
               ))}
-            {!classItem.active &&
+            {classItem.status == "INACTIVE" &&
               (user.role === "TEACHER" ? (
                 <button
                   className="start-stream-btn bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition flex items-center gap-2 shadow-lg"
@@ -141,6 +143,12 @@ const Classes = () => {
                   <span className="material-icons">notifications</span>
                 </button>
               ))}
+            {classItem.status == "COMPLETED" && (
+              <button className="reminder-btn">
+                Completed
+                <span className="material-icons">check_circle</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -166,14 +174,23 @@ const Classes = () => {
             Scheduled
             <span className="badge">{scheduledCount}</span>
           </button>
+          <button
+            className={`tab-btn ${activeTab === "completed" ? "active" : ""}`}
+            onClick={() => setActiveTab("completed")}
+          >
+            Completed
+            <span className="badge">{completedCount}</span>
+          </button>
         </div>
       </div>
 
       <div className="classes-grid">
         {activeTab === "live" &&
-          classes.filter((c) => c.active).map(renderClassCard)}
+          classes.filter((c) => c.status == "LIVE").map(renderClassCard)}
         {activeTab === "scheduled" &&
-          classes.filter((c) => !c.active).map(renderClassCard)}
+          classes.filter((c) => c.status == "INACTIVE").map(renderClassCard)}
+        {activeTab === "completed" &&
+          classes.filter((c) => c.status == "COMPLETED").map(renderClassCard)}
       </div>
 
       {showPopup && user.role == "TEACHER" && (
