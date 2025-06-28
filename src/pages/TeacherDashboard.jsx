@@ -1,10 +1,47 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {courseService} from "../utils/api";
+import { useAuth } from "../context/AuthContext.jsx";
+import CourseCard from "../components/CourseCard.jsx";
 
 const TeacherDashboard = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [courses, setCourses] = useState([]);
+  const { user } = useAuth();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = await courseService.fetchCourses(user);
+        setCourses(data);
+      } catch (err) {
+        setError(err.message || "Failed to fetch courses");
+      } finally{
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+    const filteredCourses = courses.filter((course) => {
+    // Add defensive checks for `courseName` and `teacher`
+    const courseName = course.courseName || ""; // Default to an empty string if undefined
+    const teacher = course.teacher || ""; // Default to an empty string if undefined
+    console.log(course);
+    return (
+      courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      teacher.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+
+  if (loading) return <p>Loading courses...</p>;
+  if (error) return <p>Error: {error}</p>;
   // Sample data - In a real app, this would come from your backend
   const upcomingSessions = [
     {
@@ -27,24 +64,24 @@ const TeacherDashboard = () => {
     },
   ];
 
-  const assignedClasses = [
-    {
-      id: 1,
-      name: "Physics 101",
-      students: 30,
-      schedule: "Mon, Wed 10:00 AM",
-      room: "Room 301",
-      nextSession: "2024-03-25",
-    },
-    {
-      id: 2,
-      name: "Chemistry 201",
-      students: 25,
-      schedule: "Tue, Thu 02:00 PM",
-      room: "Room 205",
-      nextSession: "2024-03-26",
-    },
-  ];
+  // const assignedClasses = [
+  //   {
+  //     id: 1,
+  //     name: "Physics 101",
+  //     students: 30,
+  //     schedule: "Mon, Wed 10:00 AM",
+  //     room: "Room 301",
+  //     nextSession: "2024-03-25",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Chemistry 201",
+  //     students: 25,
+  //     schedule: "Tue, Thu 02:00 PM",
+  //     room: "Room 205",
+  //     nextSession: "2024-03-26",
+  //   },
+  // ];
 
   const studentList = [
     {
@@ -80,43 +117,43 @@ const TeacherDashboard = () => {
     },
   ];
 
-  const renderSessionCard = (session) => (
-    <div key={session.id} className="session-card">
-      <div className="session-header">
-        <h3>{session.subject}</h3>
-        <span className={`status-badge ${session.status}`}>
-          {session.status}
-        </span>
-      </div>
-      <div className="session-details">
-        <div className="detail-item">
-          <span className="material-icons">event</span>
-          <span>{session.date}</span>
-        </div>
-        <div className="detail-item">
-          <span className="material-icons">schedule</span>
-          <span>{session.time}</span>
-        </div>
-        <div className="detail-item">
-          <span className="material-icons">location_on</span>
-          <span>{session.lab}</span>
-        </div>
-        <div className="detail-item">
-          <span className="material-icons">people</span>
-          <span>{session.students} students</span>
-        </div>
-      </div>
-      <div className="session-actions">
-        <button
-          className="action-btn primary"
-          onClick={() => navigate(`/classes/${session.id}`)}
-        >
-          Start Session
-        </button>
-        <button className="action-btn secondary">View Roster</button>
-      </div>
-    </div>
-  );
+  // const renderSessionCard = (session) => (
+  //   <div key={session.id} className="session-card">
+  //     <div className="session-header">
+  //       <h3>{session.subject}</h3>
+  //       <span className={`status-badge ${session.status}`}>
+  //         {session.status}
+  //       </span>
+  //     </div>
+  //     <div className="session-details">
+  //       <div className="detail-item">
+  //         <span className="material-icons">event</span>
+  //         <span>{session.date}</span>
+  //       </div>
+  //       <div className="detail-item">
+  //         <span className="material-icons">schedule</span>
+  //         <span>{session.time}</span>
+  //       </div>
+  //       <div className="detail-item">
+  //         <span className="material-icons">location_on</span>
+  //         <span>{session.lab}</span>
+  //       </div>
+  //       <div className="detail-item">
+  //         <span className="material-icons">people</span>
+  //         <span>{session.students} students</span>
+  //       </div>
+  //     </div>
+  //     <div className="session-actions">
+  //       <button
+  //         className="action-btn primary"
+  //         onClick={() => navigate(`/classes/${session.id}`)}
+  //       >
+  //         Start Session
+  //       </button>
+  //       <button className="action-btn secondary">View Roster</button>
+  //     </div>
+  //   </div>
+  // );
 
   const renderClassCard = (classItem) => (
     <div key={classItem.id} className="class-card">
@@ -244,13 +281,15 @@ const TeacherDashboard = () => {
       <div className="dashboard-content">
         {activeTab === "upcoming" && (
           <div className="sessions-grid">
-            {upcomingSessions.map(renderSessionCard)}
+            {/* {upcomingSessions.map(renderSessionCard)} */}
           </div>
         )}
 
         {activeTab === "classes" && (
           <div className="classes-grid">
-            {assignedClasses.map(renderClassCard)}
+            {filteredCourses.map((course, index) => (
+              <CourseCard key={index} course={course} user={user} />
+            ))}
           </div>
         )}
 

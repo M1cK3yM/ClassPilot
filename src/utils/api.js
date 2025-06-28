@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://10.139.27.98:8080"; // API Gateway URL
-// const API_BASE_URL = "http://localhost:8080"; // API Gateway URL
+// const API_BASE_URL = "http://10.139.27.98:8080"; // API Gateway URL
+const API_BASE_URL = "http://localhost:8080"; // API Gateway URL
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -33,6 +33,7 @@ export const courseService = {
       let response;
       if (user.role == "STUDENT") {
         response = await api.get(`/api/courses/user/${user.userId}/enrolled`);
+        console.log(user);
       } else if (user.role == "TEACHER") {
         console.log("Teachers information:", user);
         response = await api.get(`/api/courses/user/${user.userId}/assigned`);
