@@ -3,12 +3,12 @@ import Timetable from "../components/Timetable.jsx";
 
 const Dashboard = () => {
   const classNotices = [
-    { date: "26 Jan 2022", title: "Jan 26 will be holiday" },
-    { date: "05 Feb 2022", title: "Class field trip" },
-    { date: "06 Feb 2022", title: "Physics special class" },
-    { date: "06 Feb 2022", title: "Botany revision test" },
-    { date: "06 Feb 2022", title: "Chemistry Special class" },
-    { date: "16 Feb 2022", title: "Maths special class" },
+    { date: "26 Jun 2025", title: "Computer Programming basics" },
+    { date: "30 Jun 2025", title: "Database configuration" },
+    { date: "06 July 2025", title: "Computer Organization and architecture Test" },
+    { date: "06 July 2025", title: "Research Methods Proposal Submission" },
+    { date: "06 July 2025", title: "Multimedia system final exam" },
+    { date: "16 July 2025", title: "Java programming special class" },
   ];
 
   const attendanceData = {
@@ -63,17 +63,6 @@ const Dashboard = () => {
                   <div className="notice-title">{notice.title}</div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* School Noticeboard */}
-          <div className="noticeboard school-notices">
-            <h2>School Noticeboard</h2>
-            <div className="school-notice-image">
-              <img
-                src="/school-notice-image.jpg"
-                alt="School basketball game"
-              />
             </div>
           </div>
         </div>

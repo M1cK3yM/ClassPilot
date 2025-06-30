@@ -8,7 +8,6 @@ const courseColorMap = {
   Mathematics: "#F59E42", // Orange
   Physics: "#F43F5E", // Rose
   Chemistry: "#6366F1", // Blue
-  // Add more as needed
 };
 const defaultColor = "#64748B"; // Slate
 

@@ -1,6 +1,7 @@
 import React from "react";
 
 const TimeSlot = ({ time, subject, unit, chapter, teacher }) => {
+  console.log("TimeSlot Props:", { time, subject, unit, chapter, teacher });
   return (
     <div className={`time-slot ${subject.toLowerCase()}`}>
       <div className="time">{time}</div>

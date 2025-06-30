@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { courseService, classService } from "../utils/api";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -12,12 +13,14 @@ const CourseDetail = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
         const courseData = await courseService.getCourseById(courseId);
-        console.log(courseData);
+        console.log("Course data from the backend : ",courseData);
         setCourse(courseData);
       } catch (error) {
         console.error("Error fetching course details:", error);
@@ -33,7 +36,8 @@ const CourseDetail = () => {
     const fetchClasses = async () => {
       try {
         setLoading(true);
-        const response = await classService.featchClasses(user);
+        const response = await classService.fetchClassesCourseId(user, courseId);
+        console.log("Response from class fetched",response);
         setClasses(response);
       } catch (err) {
         setError(err.message);
@@ -47,15 +51,23 @@ const CourseDetail = () => {
     }
   }, [user]);
 
+  const handleClassBtn = async (classId) => {
+    navigate(`/teacher/streaming/${classId}`);
+  };
+
+  const handleJoinClass = async (classId) => {
+    navigate(`/student/consumer/${classId}`);
+  };
+                                                                                                
   const renderClassCard = (classItem) => {
     const startDate = classItem.startingDate
       ? new Date(classItem.startingDate).toLocaleDateString()
       : "";
     const endDate = classItem.endingDate
-      ? new Date(classItem.endingDate).toLocaleDateString()
+      ? new Date(classItem.endingDate).toLocaleDateString()                                                                                                                                                                                       
       : "";
 
-    return (
+    return (                                                                                                                                                                                                      
       <div key={classItem.id} className="class-card">
         <div className="class-header">
           <div className="class-icon" style={{ backgroundColor: "#9370DB" }}>

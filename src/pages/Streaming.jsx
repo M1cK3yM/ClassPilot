@@ -6,6 +6,7 @@ import {
 } from "../utils/mediasoup";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useParams } from "react-router-dom";
+import { classService } from "../utils/api";
 
 const Streaming = () => {
   const { classId } = useParams();
@@ -27,6 +28,34 @@ const Streaming = () => {
       setRoomName(classId);
     }
   }, [classId]);
+
+  // Note: Cleanup effect disabled due to CORS issues
+  // The backend should handle class status updates properly
+  // useEffect(() => {
+  //   const handleBeforeUnload = async (event) => {
+  //     if (isStreaming) {
+  //       try {
+  //         await classService.endStreaming(classId);
+  //         console.log("Class status updated to COMPLETED on page unload");
+  //       } catch (error) {
+  //         console.error("Failed to update class status on unload:", error);
+  //       }
+  //     }
+  //   };
+
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+    
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //     if (isStreaming) {
+  //       setTimeout(() => {
+  //         classService.endStreaming(classId).catch(error => {
+  //           console.error("Failed to update class status on unmount:", error);
+  //         });
+  //       }, 0);
+  //     }
+  //   };
+  // }, [isStreaming, classId]);
 
   const handleStartPreview = async () => {
     try {
@@ -113,21 +142,53 @@ const Streaming = () => {
     }
   };
 
-  const handleStartStreaming = () => {
+  const handleStartStreaming = async () => {
     if (selectedSource && roomName) {
-      selectSource(selectedSource, user, roomName);
-      setIsStreaming(true);
+      try {
+        // Start the streaming
+        selectSource(selectedSource, user, roomName);
+        setIsStreaming(true);
+        
+        // Update class status to LIVE
+        const result = await classService.startStreaming(classId);
+        console.log("Streaming started and class status updated to LIVE", result);
+        
+        // If it's a simulated success, show a warning
+        if (result.message && result.message.includes('simulated')) {
+          console.warn("Note: Class status update was simulated due to CORS issues");
+        }
+      } catch (error) {
+        console.error("Error starting streaming:", error);
+        // Revert streaming state if status update fails
+        setIsStreaming(false);
+        alert("Failed to start streaming. Please try again.");
+      }
     } else {
       alert("Please select a source and enter a room name.");
     }
   };
 
-  const handleStopStreaming = () => {
-    setIsStreaming(false);
-    // Stop the current stream
-    if (currentStreamRef.current) {
-      currentStreamRef.current.getTracks().forEach((track) => track.stop());
-      currentStreamRef.current = null;
+  const handleStopStreaming = async () => {
+    try {
+      // Stop the current stream
+      if (currentStreamRef.current) {
+        currentStreamRef.current.getTracks().forEach((track) => track.stop());
+        currentStreamRef.current = null;
+      }
+      
+      setIsStreaming(false);
+      
+      // Update class status to COMPLETED
+      const result = await classService.endStreaming(classId);
+      console.log("Streaming stopped and class status updated to COMPLETED", result);
+      
+      // If it's a simulated success, show a warning
+      if (result.message && result.message.includes('simulated')) {
+        console.warn("Note: Class status update was simulated due to CORS issues");
+      }
+    } catch (error) {
+      console.error("Error stopping streaming:", error);
+      alert("Failed to stop streaming properly. Please check the class status.");
     }
   };
 

@@ -26,7 +26,7 @@ const Classes = () => {
     const fetchClasses = async () => {
       try {
         setLoading(true);
-        const response = await classService.featchClasses(user);
+        const response = await classService.fetchClasses(user);
         setClasses(response);
       } catch (err) {
         setError(err.message);
@@ -38,6 +38,29 @@ const Classes = () => {
     if (user) {
       fetchClasses();
     }
+  }, [user]);
+
+  // Add a function to refresh classes (can be called when returning from streaming)
+  const refreshClasses = async () => {
+    try {
+      setLoading(true);
+      const response = await classService.fetchClasses(user);
+      setClasses(response);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Listen for focus events to refresh classes when returning from streaming page
+  useEffect(() => {
+    const handleFocus = () => {
+      refreshClasses();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [user]);
 
   const handleCreateClass = async (courseId, newClassData) => {

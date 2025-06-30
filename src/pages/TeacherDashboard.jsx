@@ -29,6 +29,7 @@ const TeacherDashboard = () => {
   }, []);
 
     const filteredCourses = courses.filter((course) => {
+      // console.log("This is the course log :", course);
     // Add defensive checks for `courseName` and `teacher`
     const courseName = course.courseName || ""; // Default to an empty string if undefined
     const teacher = course.teacher || ""; // Default to an empty string if undefined
@@ -64,25 +65,6 @@ const TeacherDashboard = () => {
     },
   ];
 
-  // const assignedClasses = [
-  //   {
-  //     id: 1,
-  //     name: "Physics 101",
-  //     students: 30,
-  //     schedule: "Mon, Wed 10:00 AM",
-  //     room: "Room 301",
-  //     nextSession: "2024-03-25",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Chemistry 201",
-  //     students: 25,
-  //     schedule: "Tue, Thu 02:00 PM",
-  //     room: "Room 205",
-  //     nextSession: "2024-03-26",
-  //   },
-  // ];
-
   const studentList = [
     {
       id: 1,
@@ -117,43 +99,6 @@ const TeacherDashboard = () => {
     },
   ];
 
-  // const renderSessionCard = (session) => (
-  //   <div key={session.id} className="session-card">
-  //     <div className="session-header">
-  //       <h3>{session.subject}</h3>
-  //       <span className={`status-badge ${session.status}`}>
-  //         {session.status}
-  //       </span>
-  //     </div>
-  //     <div className="session-details">
-  //       <div className="detail-item">
-  //         <span className="material-icons">event</span>
-  //         <span>{session.date}</span>
-  //       </div>
-  //       <div className="detail-item">
-  //         <span className="material-icons">schedule</span>
-  //         <span>{session.time}</span>
-  //       </div>
-  //       <div className="detail-item">
-  //         <span className="material-icons">location_on</span>
-  //         <span>{session.lab}</span>
-  //       </div>
-  //       <div className="detail-item">
-  //         <span className="material-icons">people</span>
-  //         <span>{session.students} students</span>
-  //       </div>
-  //     </div>
-  //     <div className="session-actions">
-  //       <button
-  //         className="action-btn primary"
-  //         onClick={() => navigate(`/classes/${session.id}`)}
-  //       >
-  //         Start Session
-  //       </button>
-  //       <button className="action-btn secondary">View Roster</button>
-  //     </div>
-  //   </div>
-  // );
 
   const renderClassCard = (classItem) => (
     <div key={classItem.id} className="class-card">
