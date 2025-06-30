@@ -11,14 +11,10 @@ const TimeSlot = ({ time, subject, unit, chapter, teacher }) => {
           {subject}
         </div>
         <div className="class-info">
-          {unit} {chapter}
+          {chapter}
         </div>
         <div className="teacher">
-          <img
-            src="/teacher-avatar.png"
-            alt={teacher}
-            className="teacher-avatar"
-          />
+          <span className="material_icon">👨‍🏫 </span>
           {teacher}
         </div>
       </div>

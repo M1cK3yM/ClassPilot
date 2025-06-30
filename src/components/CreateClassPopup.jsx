@@ -5,7 +5,8 @@ const CreateClassPopup = ({ onClose, onCreateClass, user }) => {
   const [className, setClassName] = useState("");
   const [description, setDescription] = useState("");
   const [startingDate, setStartingDate] = useState("");
-  const [endingDate, setEndingDate] = useState("");
+  const [startingTime, setStartingTime] = useState("");
+  const [endingTime, setEndingTime] = useState("");
   const [selectedCourseId, setSelectedCourseId] = useState("");
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,12 +33,17 @@ const CreateClassPopup = ({ onClose, onCreateClass, user }) => {
       !className ||
       !description ||
       !startingDate ||
-      !endingDate ||
+      !startingTime ||
+      !endingTime ||
       !selectedCourseId
     ) {
       alert("Please fill in all fields.");
       return;
     }
+
+    // Combine date and times into Date objects
+    const startDateTime = new Date(`${startingDate}T${startingTime}`);
+    const endDateTime = new Date(`${startingDate}T${endingTime}`);
 
     // Call the onCreateClass function with the new RoomDTO structure
     onCreateClass(selectedCourseId, {
@@ -45,14 +51,15 @@ const CreateClassPopup = ({ onClose, onCreateClass, user }) => {
       description,
       instructorId: user.userId,
       instructorName: user.username,
-      startingDate: new Date(startingDate),
-      endingDate: new Date(endingDate),
+      startingDate: startDateTime,
+      endingDate: endDateTime,
     });
     // Clear form fields and close the popup
     setClassName("");
     setDescription("");
     setStartingDate("");
-    setEndingDate("");
+    setStartingTime("");
+    setEndingTime("");
     setSelectedCourseId("");
     onClose();
   };
@@ -135,15 +142,31 @@ const CreateClassPopup = ({ onClose, onCreateClass, user }) => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="endingDate"
+              htmlFor="startingTime"
             >
-              Ending Date
+              Starting Time
             </label>
             <input
-              type="date"
-              id="endingDate"
-              value={endingDate}
-              onChange={(e) => setEndingDate(e.target.value)}
+              type="time"
+              id="startingTime"
+              value={startingTime}
+              onChange={(e) => setStartingTime(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="endingTime"
+            >
+              Ending Time
+            </label>
+            <input
+              type="time"
+              id="endingTime"
+              value={endingTime}
+              onChange={(e) => setEndingTime(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
