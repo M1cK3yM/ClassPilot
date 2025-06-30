@@ -3,6 +3,7 @@ import {
   getLocalStream,
   selectSource,
   replaceProducerTrack,
+  closeProducer,
 } from "../utils/mediasoup";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useParams } from "react-router-dom";
@@ -149,14 +150,6 @@ const Streaming = () => {
         selectSource(selectedSource, user, roomName);
         setIsStreaming(true);
         
-        // Update class status to LIVE
-        const result = await classService.startStreaming(classId);
-        console.log("Streaming started and class status updated to LIVE", result);
-        
-        // If it's a simulated success, show a warning
-        if (result.message && result.message.includes('simulated')) {
-          console.warn("Note: Class status update was simulated due to CORS issues");
-        }
       } catch (error) {
         console.error("Error starting streaming:", error);
         // Revert streaming state if status update fails
@@ -175,17 +168,11 @@ const Streaming = () => {
         currentStreamRef.current.getTracks().forEach((track) => track.stop());
         currentStreamRef.current = null;
       }
-      
+
+      closeProducer();
+
       setIsStreaming(false);
-      
-      // Update class status to COMPLETED
-      const result = await classService.endStreaming(classId);
-      console.log("Streaming stopped and class status updated to COMPLETED", result);
-      
-      // If it's a simulated success, show a warning
-      if (result.message && result.message.includes('simulated')) {
-        console.warn("Note: Class status update was simulated due to CORS issues");
-      }
+
     } catch (error) {
       console.error("Error stopping streaming:", error);
       alert("Failed to stop streaming properly. Please check the class status.");

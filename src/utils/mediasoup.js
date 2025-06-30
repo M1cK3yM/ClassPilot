@@ -380,3 +380,17 @@ export const replaceProducerTrack = async (newTrack) => {
     await videoProducer.replaceTrack({ track: newTrack });
   }
 };
+
+export const closeProducer = async () => {
+  if (videoProducer) {
+    videoProducer.close();
+    videoProducer = null; 
+    console.log("Producer Closed");
+  } 
+
+  if (producerTransport) {
+    producerTransport.close();
+    producerTransport = null;
+    console.log("Producer Transport Closed");
+  }
+}
