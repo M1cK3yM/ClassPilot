@@ -1079,28 +1079,132 @@ body {
 /* Students Table */
 .students-table-container {
   overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  margin-top: 1rem;
 }
 
 .students-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .students-table th,
 .students-table td {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.875rem;
 }
 
 .students-table th {
-  background-color: #f9fafb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
   font-weight: 600;
-  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.students-table th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.students-table th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.students-table tr {
+  transition: all 0.2s ease;
 }
 
 .students-table tr:hover {
-  background-color: #f9fafb;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.students-table tr:last-child td {
+  border-bottom: none;
+}
+
+.students-table tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.students-table tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+.students-table td {
+  color: #374151;
+  font-weight: 500;
+}
+
+.students-table td:nth-child(1) {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.students-table td:nth-child(2) {
+  color: #6b7280;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.8rem;
+}
+
+/* Empty state styling */
+.students-table tr.empty-state td {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9ca3af;
+  font-style: italic;
+  background: #f9fafb;
+}
+
+/* Loading state styling */
+.students-table tr.loading-state td {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6b7280;
+  background: #f9fafb;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Enhanced student section styling */
+.students-section {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.students-section h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.course-students-section {
+  margin-bottom: 2rem;
+}
+
+.course-students-section:last-child {
+  margin-bottom: 0;
 }
 
 /* Resource Bookings */

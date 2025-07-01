@@ -187,4 +187,20 @@ export const classService = {
   },
 };
 
+export const studentService = {
+  fetchStudentsByCourse: async (courseId) => {
+    try {
+      const response = await api.get(`/api/users/students/${courseId}`);
+      console.log("Students for course:", response.data);
+      return response.data;
+    } catch (error) {
+      throw (
+        error.response?.data || {
+          message: "An error occurred while fetching students for course",
+        }
+      );
+    }
+  },
+};
+
 export default api;
